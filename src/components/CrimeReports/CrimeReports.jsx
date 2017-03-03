@@ -15,57 +15,104 @@ class CrimeReports extends Component {
   componentWillMount() {
     //this.props.getDonorDetail(this.props.params.id);
   }
+//"Crime"
+//<Fingerprint />
+  displayPrimaryTextBasedOnReportType(report){
+    
+    if(report.reportType==="Crime" || report.reportType==="Complaint"){
+      return report.title;
+    }
+    else {
+      return report.fullName;
+    }
+  }
+
+  displaySecondyTextBasedOnReportType(report){    
+    if(report.reportType==="Crime" || report.reportType==="Complaint"){
+      return report.description;
+    }
+    else {
+      return report.identification;
+    }
+  }
+
+  renderList(reportType,iconComponent){
+    return (
+          <MUI.List>
+              {
+                this.props.reportList
+                  .filter(report=>report.reportType===reportType)
+                  .map(report=>{
+                  return (
+                    <div key={report.key}>
+                      <MUI.ListItem
+                        leftAvatar={<MUI.Avatar icon={iconComponent} />}
+                        rightIcon={<ActionInfo />}
+                        primaryText={this.displayPrimaryTextBasedOnReportType(report)}
+                        secondaryText={this.displaySecondyTextBasedOnReportType(report)}
+                      />
+                      <MUI.Divider />
+                    </div>  
+                  );
+                })
+              }             
+            </MUI.List>
+        );
+  }
+
+
+  renderComplaintsTabIfAuthenticated(){
+    let complaintsEle = (
+        <MUI.Tab
+            icon={<RecordVoiceOver />}
+            label="Complaints">              
+              {
+                (()=>{
+                  var list = this.props.reportList.filter(report=>report.reportType==="Complaint");
+                  return list.length > 0 ? this.renderList("Complaint",<Face />) 
+                  : 
+                  <div style={{margin:20}}>Luckly No Complaint for this city</div>
+                })()
+              }          
+          </MUI.Tab>);
+    if(this.props.isAuthenticated){
+      return complaintsEle;
+    }
+  }
 
   //user-default
+  //{this.renderList("Missing Person",<Face />)}
+  //{this.renderList("Complaint",<RecordVoiceOver />)} 
   render() {
+    console.log("test");
     return (
       <div style={styles.crimeReportsContainer}>
         <MUI.Tabs>
           <MUI.Tab
             icon={<Fingerprint />}
             label="Crimes">
-              <MUI.List>
-                <div key={"donor.uid"}>
-                    <MUI.ListItem                    
-                        leftAvatar={<MUI.Avatar icon={<Fingerprint />} />}
-                        rightIcon={<ActionInfo />}
-                        primaryText={"donor.fullName"}
-                        secondaryText={"Blood Group: "}
-                      />
-                      <MUI.Divider />
-                </div>                
-              </MUI.List>
+              {
+                (()=>{
+                  var list = this.props.reportList.filter(report=>report.reportType==="Crime");
+                  return list.length > 0 ? this.renderList("Crime",<Fingerprint />) 
+                  : 
+                  <div style={{margin:20}}>Luckly No Crime Report for this city</div>
+                })()
+              }
           </MUI.Tab>
           <MUI.Tab
             icon={<Face />}
-            label="Missing Persons">
-            <MUI.List>
-                <div key={"donor.uid"}>
-                    <MUI.ListItem                    
-                        leftAvatar={<MUI.Avatar icon={<Face />} />}
-                        rightIcon={<ActionInfo />}
-                        primaryText={"donor.fullName"}
-                        secondaryText={"Blood Group: "}
-                      />
-                      <MUI.Divider />
-                </div>                
-              </MUI.List>
+            label="Missing Persons">            
+            {
+                (()=>{
+                  var list = this.props.reportList.filter(report=>report.reportType==="Missing Person");
+                  return list.length > 0 ? this.renderList("Missing Person",<Face />) 
+                  : 
+                  <div style={{margin:20}}>Luckly No Missing Person Report for this city</div>
+                })()
+              }
           </MUI.Tab>
-          <MUI.Tab
-            icon={<RecordVoiceOver />}
-            label="Complaints">
-            <MUI.List>
-                <div key={"donor.uid"}>
-                    <MUI.ListItem                    
-                        leftAvatar={<MUI.Avatar icon={<RecordVoiceOver />} />}
-                        rightIcon={<ActionInfo />}
-                        primaryText={"donor.fullName"}
-                        secondaryText={"Blood Group: "}
-                      />
-                      <MUI.Divider />
-                </div>                
-              </MUI.List>
-          </MUI.Tab>
+          {this.renderComplaintsTabIfAuthenticated()}
         </MUI.Tabs>
       </div>
     );

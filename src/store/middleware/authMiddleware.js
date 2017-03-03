@@ -34,7 +34,7 @@ export default class AuthMiddleware {
             uid: authUser.uid,
             email: credentials.email,
             fullName:credentials.fullName,
-            isDonor: false
+            isAdmin: false
         };
         firebase.database().ref('/')
             .child(`users/${user.uid}`)

@@ -2,25 +2,26 @@ import { combineReducers, applyMiddleware, createStore, compose } from 'redux'
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import AuthReducer from './reducers/authReducer';
-import DonorReducer from './reducers/donorReducer';
+import ReportReducer from './reducers/reportReducer';
 
 import AuthMiddleware from './middleware/authMiddleware'
-import DonorMiddleware from './middleware/donorMiddleware'
+import ReportMiddelware from './middleware/reportMiddelware'
 
 export {
     AuthMiddleware,
-    DonorMiddleware
+    ReportMiddelware
 }
 
 
 //const middleware = applyMiddleware(thunk,logger());
 const middleware = compose(
-      applyMiddleware(thunk,logger()),
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+      applyMiddleware(thunk,logger())
+      /*,
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()*/
     );
 export const rootReducer = combineReducers({
     AuthReducer,
-    DonorReducer
+    ReportReducer
 // more reducers go here
 })
 

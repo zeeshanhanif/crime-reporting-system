@@ -7,6 +7,9 @@ import Avatar from 'material-ui/Avatar';
 import Assessment from 'material-ui/svg-icons/action/assessment';
 import Web from 'material-ui/svg-icons/av/web';
 import { AuthMiddleware } from '../../store'
+import {deepOrangeA700} from 'material-ui/styles/colors';
+
+
 
 
 function mapStateToProps(state) {
@@ -28,18 +31,41 @@ class Navigation extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    /*
     setTimeout(()=> {
       if(!this.props.isAuthenticated){
         console.log("Logout true");
           this.context.router.push("/login");
       }
     },0);
+    */
   }
 
   /*
   handelSignin() {
     this.props.logout();
   }*/
+
+  renderAuthenticatedUserMenu(){
+    const menu = (
+      <div>
+          <MUI.MenuItem
+              className="navigation-menuItem"
+              primaryText="File A Report"
+              leftIcon={<Web/>}
+              containerElement={<Link to="/filereport"/>}
+          />
+          <MUI.MenuItem
+            className="navigation-menuItem"
+            primaryText="View My Reports"
+            leftIcon={<Web/>}
+            containerElement={<Link to="/myreports"/>}
+          />
+      </div>
+    );
+    return menu;
+  }
+
   drawerMenu(){
     return (
       <div>
@@ -55,29 +81,41 @@ class Navigation extends Component {
               leftIcon={<Assessment/>}
               containerElement={<Link to="/dashboard"/>}
             />
-          <MUI.MenuItem
-              className="navigation-menuItem"
-              primaryText={this.props.authUser.isDonor?"Update Info":"Register as Doner"} 
-              leftIcon={<Web/>}
-              containerElement={<Link to="/dashboard/registerDonor"/>}
-            />
-          <MUI.MenuItem
-            className="navigation-menuItem"
-            primaryText="Donors"
-            leftIcon={<Web/>}
-            containerElement={<Link to="/dashboard/donorlist"/>}
-          />
+          {
+            this.props.isAuthenticated?this.renderAuthenticatedUserMenu():null              
+          }  
+          
       </div>
     );
   }
 
+  renderActionButtons(){
+
+    const signup_signin_btn = (
+            <div>
+              <MUI.RaisedButton style={{marginRight:10}} label="Sign In" onTouchTap={()=>this.context.router.push("/login")}/>
+              <MUI.RaisedButton label="Sign Up" onTouchTap={()=>this.context.router.push("/signup")}/>
+            </div>);
+
+    const signout = (
+            <div>
+              <MUI.RaisedButton label="Sign out" onTouchTap={this.props.logout}/>
+            </div>
+            )
+
+    if(this.props.isAuthenticated){
+      return signout;
+    }
+    else {
+      return signup_signin_btn;
+    }
+  }
   render() {
     return (
       <div className="navigation-container">
         <MUI.AppBar style={this.props.styles} title="Blood Bank System"
               onLeftIconButtonTouchTap={this.props.drawerToggle}
-              iconElementRight={<MUI.FlatButton label="Sign out" onTouchTap={this.props.logout}/>}
-              onRightIconButtonTouchTap={()=>this.context.router.push("/login")}
+              iconElementRight={this.renderActionButtons()}
               />
         <MUI.Drawer open={this.props.drawerOpen} docked={false}
             onRequestChange={this.props.drawerToggle}>

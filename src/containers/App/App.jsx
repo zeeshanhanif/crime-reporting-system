@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppTheme from '../../app-theme';
 import Navigation from '../Navigation/Navigation'
 import { connect } from 'react-redux';
-import { AuthMiddleware } from '../../store'
+import { AuthMiddleware, ReportMiddelware } from '../../store'
 
 function mapStateToProps(state) {
     return {
@@ -15,7 +15,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        isLoggedIn: () => dispatch(AuthMiddleware.isLoggedIn())
+        isLoggedIn: () => dispatch(AuthMiddleware.isLoggedIn()),
+        getListOfCities: ()=> dispatch(ReportMiddelware.getListOfCities()),
+        getReportCounts: ()=> dispatch(ReportMiddelware.getReportCounts())
     };
 }
 
@@ -37,6 +39,8 @@ class App extends Component {
   }
 
   componentWillMount() {
+    this.props.getListOfCities();
+    this.props.getReportCounts();
     /*
     if(this.props.isAuthenticated){
       console.log("Authenticated");

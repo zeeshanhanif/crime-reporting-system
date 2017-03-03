@@ -13,15 +13,15 @@ function mapStateToProps(state) {
         reportCounts: state.ReportReducer.reportCounts,
         reportList: state.ReportReducer.reportList,
         cityList : state.ReportReducer.cityList,
-        //donorDetail: state.DonorReducer.donorDetail,
-        //isDetailUpdated: state.DonorReducer.isDetailUpdated
+        myReportList : state.ReportReducer.myReportList
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
       getReportList : (cityNameOrTotal)=>dispatch(ReportMiddelware.getReportList(cityNameOrTotal)),
-      getMyReportList : (cityNameOrTotal)=>dispatch(ReportMiddelware.getReportList(cityNameOrTotal)),
+      //getMyReportList : (userId)=>dispatch(ReportMiddelware.getMyReportList(userId)),
+      //getMyReportList : (cityNameOrTotal)=>dispatch(ReportMiddelware.getMyReportList(cityNameOrTotal)),
     };
 }
 
@@ -40,31 +40,45 @@ class Dashboard extends Component {
     this.props.getReportList(value);
   }
 
+  renderCityFilter(){
+    var cityFilter = (
+      <div style={{border: 'solid 1px #d9d9d9'}}>
+        <div style={{display:"inline-block",verticalAlign:"bottom",paddingBottom:17,paddingRight:15}}>
+          Select City To Filter Reports
+        </div>
+        <MUI.SelectField
+            ref="city"
+            floatingLabelText="City"
+            value={this.state.city}
+            autoWidth={true}
+            onChange={this.handleCityChange.bind(this)}>
+              {
+                this.props.cityList.map(city=>{
+                  return <MUI.MenuItem key={city} value={city} primaryText={city}/>
+                })
+              }
+          </MUI.SelectField>
+      </div>
+    );
+    if(this.props.location.pathname==="/myreports"){
+      return null;
+    }
+    return cityFilter;
+  }
+
   render() {
+    console.log("in dashboard",this.props);
     return (
       <div className="dashboard-container">
+        {
+          this.props.location.pathname!=="/myreports"?(
         <div>
           <CrimeSummary {...this.props} city={this.state.city} />
-        </div>
-        <div style={{border: 'solid 1px #d9d9d9'}}>
-          <div style={{display:"inline-block",verticalAlign:"bottom",paddingBottom:17,paddingRight:15}}>
-            Select City To Filter Reports
-          </div>
-          <MUI.SelectField
-              ref="city"
-              floatingLabelText="City"
-              value={this.state.city}
-              autoWidth={true}
-              onChange={this.handleCityChange.bind(this)}>
-                {
-                  this.props.cityList.map(city=>{
-                    return <MUI.MenuItem key={city} value={city} primaryText={city}/>
-                  })
-                }
-            </MUI.SelectField>
-        </div>
+          </div>):null
+        }
+        {this.renderCityFilter()}
         <div>
-          <CrimeReports {...this.props} />
+          <CrimeReports {...this.props} isAdmin={true} showSelfReports={this.props.location.pathname==="/myreports"} />
         </div>        
       </div>
     );

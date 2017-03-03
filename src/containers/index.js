@@ -4,6 +4,7 @@ import Signup from './Signup/Signup'
 import Dashboard from './Dashboard/Dashboard'
 import Navigation from './Navigation/Navigation'
 import FileReport from './FileReport/FileReport'
+import ReportDetail from './ReportDetail/ReportDetail'
 
 export {
     App,
@@ -11,5 +12,6 @@ export {
     Signup,
     Dashboard,
     Navigation,
-    FileReport
+    FileReport,
+    ReportDetail
 }

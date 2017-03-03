@@ -1,4 +1,5 @@
 import AuthActions from "./../actions/authActions";
+import ReportMiddleware from "./../middleware/reportMiddelware";
 import LocalStorageManager from '../../services/localStorageManager'
 import * as firebase from 'firebase';
 
@@ -80,6 +81,8 @@ export default class AuthMiddleware {
                 console.log("user after login ",userObj.val());
                 LocalStorageManager.setUser(userObj.val())
                 dispatch(AuthActions.signinSuccessful(userObj.val()));
+                //dispatch(ReportMiddleware.getMyReportList(userObj.uid));
+                
             });
     }
     // Signin Functions Ends
@@ -89,6 +92,7 @@ export default class AuthMiddleware {
     static logout() {
         return (dispatch) => {
             dispatch(AuthActions.logout())
+            //dispatch(ReportActions.getMyReportList())
             AuthMiddleware.logoutFromFirebase(dispatch);            
         }
     }
@@ -98,6 +102,8 @@ export default class AuthMiddleware {
         firebase.auth().signOut()
         .then(function (){
             dispatch(AuthActions.logoutSuccessful())
+
+            
         })
         .catch(function(error){
             console.log("Error in lougout ",error);
@@ -114,6 +120,7 @@ export default class AuthMiddleware {
             let user = LocalStorageManager.getUser();
             if(user){
                 dispatch(AuthActions.signinSuccessful(user))
+                dispatch(ReportMiddleware.getMyReportList(user.uid));
             }
             else {
                 console.log("not logged in ");

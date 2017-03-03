@@ -7,7 +7,6 @@ import Avatar from 'material-ui/Avatar';
 import Assessment from 'material-ui/svg-icons/action/assessment';
 import Web from 'material-ui/svg-icons/av/web';
 import { AuthMiddleware } from '../../store'
-import {deepOrangeA700} from 'material-ui/styles/colors';
 
 
 
@@ -35,16 +34,17 @@ class Navigation extends Component {
     setTimeout(()=> {
       if(!this.props.isAuthenticated){
         console.log("Logout true");
-          this.context.router.push("/login");
+          this.context.router.push("/dashboard");
       }
     },0);
     */
   }
 
-  /*
-  handelSignin() {
+  
+  handelLogout() {
     this.props.logout();
-  }*/
+    this.context.router.push("/")
+  }
 
   renderAuthenticatedUserMenu(){
     const menu = (
@@ -82,7 +82,7 @@ class Navigation extends Component {
               containerElement={<Link to="/dashboard"/>}
             />
           {
-            this.props.isAuthenticated?this.renderAuthenticatedUserMenu():null              
+            this.props.isAuthenticated && !this.props.authUser.isAdmin?this.renderAuthenticatedUserMenu():null              
           }  
           
       </div>
@@ -99,7 +99,7 @@ class Navigation extends Component {
 
     const signout = (
             <div>
-              <MUI.RaisedButton label="Sign out" onTouchTap={this.props.logout}/>
+              <MUI.RaisedButton label="Sign out" onTouchTap={this.handelLogout.bind(this)}/>
             </div>
             )
 

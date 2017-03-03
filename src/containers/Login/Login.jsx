@@ -9,17 +9,20 @@ import Help from 'material-ui/svg-icons/action/help';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import './Login.css';
 import {grey500} from 'material-ui/styles/colors';
-import { AuthMiddleware } from '../../store'
+import { AuthMiddleware, ReportMiddelware } from '../../store'
 
 function mapStateToProps(state) {
     return {
         isAuthenticated: state.AuthReducer.isAuthenticated,
+        authUser: state.AuthReducer.authUser,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        signin: (credentials) => dispatch(AuthMiddleware.signin(credentials))
+        signin: (credentials) => dispatch(AuthMiddleware.signin(credentials)),
+        getMyReportList : (userId)=>dispatch(ReportMiddelware.getMyReportList(userId)),
+
     };
 }
 
@@ -38,7 +41,9 @@ class Login extends Component {
     setTimeout(()=> {
       if(this.props.isAuthenticated){
         console.log("Authenticated true in signup");
+          this.props.getMyReportList(this.props.authUser.uid);
           this.context.router.push("/dashboard");
+
       }
     },0);
   }

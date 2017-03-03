@@ -1,22 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component,PropTypes } from 'react';
 import * as MUI from 'material-ui'
 import styles from './CrimeReportsStyles';
-import InfoBox from '../InfoBox/InfoBox'
 import Face from 'material-ui/svg-icons/action/face';
-import Assessment from 'material-ui/svg-icons/action/assessment';
 import Fingerprint from 'material-ui/svg-icons/action/fingerprint';
 import RecordVoiceOver from 'material-ui/svg-icons/action/record-voice-over';
 import ActionInfo from 'material-ui/svg-icons/action/info';
-import {cyan600, pink600, purple600, orange600} from 'material-ui/styles/colors';
 
 
 class CrimeReports extends Component {
   
-  componentWillMount() {
-    //this.props.getDonorDetail(this.props.params.id);
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
-//"Crime"
-//<Fingerprint />
+
+  constructor(){
+    super();
+    this.handleListItemClick = this.handleListItemClick.bind(this)
+  }
+
   displayPrimaryTextBasedOnReportType(report){
     
     if(report.reportType==="Crime" || report.reportType==="Complaint"){
@@ -35,12 +36,20 @@ class CrimeReports extends Component {
       return report.identification;
     }
   }
+/*
+  handleListItemClick = (reportCity,reportId) => {
+    console.log("test in >>>>>>>>><<<<<<<<<<<<<<")
+    this.context.router.push("/reportItem/"+reportId);
+  }*/
 
+  //handleListItemClick = (reportId) =>this.context.router.push("/reportItem/"+reportId);
+  handleListItemClick = (reportCity,reportId) => this.context.router.push({pathname:"/reportItem/"+reportId,state:{reportCity:reportCity}});
   renderList(reportType,iconComponent){
+    const reportList = this.props.showSelfReports?this.props.myReportList:this.props.reportList;
     return (
           <MUI.List>
               {
-                this.props.reportList
+                reportList
                   .filter(report=>report.reportType===reportType)
                   .map(report=>{
                   return (
@@ -50,6 +59,7 @@ class CrimeReports extends Component {
                         rightIcon={<ActionInfo />}
                         primaryText={this.displayPrimaryTextBasedOnReportType(report)}
                         secondaryText={this.displaySecondyTextBasedOnReportType(report)}
+                        onTouchTap={()=>this.handleListItemClick(report.city,report.key)}
                       />
                       <MUI.Divider />
                     </div>  
@@ -62,13 +72,14 @@ class CrimeReports extends Component {
 
 
   renderComplaintsTabIfAuthenticated(){
+    const reportList = this.props.showSelfReports?this.props.myReportList:this.props.reportList;
     let complaintsEle = (
         <MUI.Tab
             icon={<RecordVoiceOver />}
             label="Complaints">              
               {
                 (()=>{
-                  var list = this.props.reportList.filter(report=>report.reportType==="Complaint");
+                  var list = reportList.filter(report=>report.reportType==="Complaint");
                   return list.length > 0 ? this.renderList("Complaint",<Face />) 
                   : 
                   <div style={{margin:20}}>Luckly No Complaint for this city</div>
@@ -85,6 +96,7 @@ class CrimeReports extends Component {
   //{this.renderList("Complaint",<RecordVoiceOver />)} 
   render() {
     console.log("test");
+    const reportList = this.props.showSelfReports?this.props.myReportList:this.props.reportList;
     return (
       <div style={styles.crimeReportsContainer}>
         <MUI.Tabs>
@@ -93,7 +105,7 @@ class CrimeReports extends Component {
             label="Crimes">
               {
                 (()=>{
-                  var list = this.props.reportList.filter(report=>report.reportType==="Crime");
+                  var list = reportList.filter(report=>report.reportType==="Crime");
                   return list.length > 0 ? this.renderList("Crime",<Fingerprint />) 
                   : 
                   <div style={{margin:20}}>Luckly No Crime Report for this city</div>
@@ -105,7 +117,7 @@ class CrimeReports extends Component {
             label="Missing Persons">            
             {
                 (()=>{
-                  var list = this.props.reportList.filter(report=>report.reportType==="Missing Person");
+                  var list = reportList.filter(report=>report.reportType==="Missing Person");
                   return list.length > 0 ? this.renderList("Missing Person",<Face />) 
                   : 
                   <div style={{margin:20}}>Luckly No Missing Person Report for this city</div>

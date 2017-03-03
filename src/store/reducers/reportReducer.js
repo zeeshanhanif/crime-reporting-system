@@ -9,7 +9,8 @@ const INITIAL_STATE = {
     reportDetail : {},
     isReportSubmited: false,
     cityList: [],
-    reportCounts:{}
+    reportCounts:{},
+    myReportList:[]
     /*
     reportCounts:{
         totalCounts: {
@@ -42,12 +43,14 @@ function ReportReducer(state = INITIAL_STATE, action) {
             var newReportList = [...state.reportList];
             newReportList.push(action.payload);
             return {...state, isProcessing: false, isError : false, reportList:newReportList};
+        
         case ReportActions.GET_REPORT_DETAIL:
             return {...state, isProcessing: true, isError : false, reportDetail: {}};
         case ReportActions.GET_REPORT_DETAIL_SUCCESSFUL:
             return {...state, isProcessing: false ,isError : false, errorMessage: {},reportDetail:action.payload};            
         case ReportActions.GET_REPORT_DETAIL_REJECTED:
             return {...state, isProcessing: false, isError : true, errorMessage: action.payload, reportDetail:{}};
+        
         case ReportActions.GET_LIST_OF_CITIES:
             return {...state, isProcessing: true, isError : false, cityList: []};
         case ReportActions.GET_LIST_OF_CITIES_SUCCESSFUL:            
@@ -61,6 +64,23 @@ function ReportReducer(state = INITIAL_STATE, action) {
             return {...state, isProcessing: false ,isError : false, errorMessage: {},reportCounts:action.payload};            
         case ReportActions.GET_REPORT_COUNTS_REJECTED:
             return {...state, isProcessing: false, isError : true, errorMessage: action.payload, reportCounts:{}};            
+
+
+        case ReportActions.GET_MY_REPORT_LIST:
+            return {...state, isProcessing: true, isError : false,myReportList:[]};
+        case ReportActions.GET_MY_REPORT_LIST_SUCCESSFUL:
+            return {...state, isProcessing: false, isError : false, myReportList:action.payload};
+        case ReportActions.ADD_MY_REPORT_ITEM:
+            var newReportList = [...state.myReportList];
+            newReportList.push(action.payload);
+            return {...state, isProcessing: false, isError : false, myReportList:newReportList};            
+
+        case ReportActions.UPDATE_REPORT_STATUS:
+            return {...state, isProcessing: true, isError : false,isStatusUpdated:false};
+        case ReportActions.UPDATE_REPORT_STATUS_SUCCESSFUL:
+            return {...state, isProcessing: false ,isError : false, errorMessage: {},isStatusUpdated:true};            
+        case ReportActions.UPDATE_REPORT_STATUS_REJECTED:
+            return {...state, isProcessing: false, isError : true, errorMessage: action.payload,isStatusUpdated:false};                     
         default:
             return state;
     }

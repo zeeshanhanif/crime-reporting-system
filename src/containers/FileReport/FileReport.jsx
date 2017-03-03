@@ -10,7 +10,8 @@ function mapStateToProps(state) {
         isAuthenticated: state.AuthReducer.isAuthenticated,
         authUser: state.AuthReducer.authUser,
         cityList : state.ReportReducer.cityList,
-        reportCounts : state.ReportReducer.reportCounts
+        reportCounts : state.ReportReducer.reportCounts,
+        isReportSubmited : state.ReportReducer.isReportSubmited
     };
 }
 
@@ -40,13 +41,23 @@ class FileReport extends Component {
       identification:"",
       contactNo:"",
       ///age:0,
-      //dateSinceMissing:new Date(),
+      dateSinceMissing:new Date(),
     };
     this.handleSave = this.handleSave.bind(this);
     this.handleChangeInput = this.handleChangeInput.bind(this);
     this.handleChangeInDate = this.handleChangeInDate.bind(this);
   }
 
+
+  componentWillUpdate(){
+    console.log("test>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    setTimeout(()=> {
+      if(this.props.isReportSubmited){
+        console.log("isReportSubmited true >>>>>>>>>>>>>>>>>>>>>");
+          //this.context.router.push("/dashboard");
+      }
+    },0);
+  }
   handleReportChange = (event, index, value) => {
     this.setState({reportType:value});
   }
@@ -84,48 +95,11 @@ class FileReport extends Component {
       reportObj.address = this.state.address;
       reportObj.age = this.state.age;
       reportObj.identification = this.state.identification;
-      reportObj.dateSinceMissing = this.state.dateSinceMissing;
+      reportObj.dateSinceMissing = this.state.dateSinceMissing.getTime();
     }
     this.props.fileReport(reportObj,this.props.reportCounts);
-    
-
-    /*
-    this.props.registerDoner(
-      {
-        uid:this.props.authUser.uid,
-        isDonor:true,
-        fullName:this.refs.fullName.getValue(),
-        address:this.refs.address.getValue(),
-        contactNo:this.refs.contactNo.getValue(),
-        bloodGroup:this.refs.bloodGroup.props.value,
-        dateOfBirth:this.refs.dateOfBirth.state.date.getTime(),
-      });
-      */
   }
 
-  componentWillMount(){
-    /*
-    this.setState(
-      {
-        bloodGroupValue: this.props.authUser.bloodGroup,
-        fullName:this.props.authUser.fullName,
-        address:this.props.authUser.address,
-        contactNo:this.props.authUser.contactNo,
-        dateOfBirth:this.props.authUser.dateOfBirth?new Date(this.props.authUser.dateOfBirth):new Date(),
-      })
-      */
-  }
-
-  componentWillReceiveProps(nextProps){
-    /*
-    setTimeout(()=> {
-      if(this.props.isDetailUpdated){
-        console.log("isDetailUpdated true");
-        this.context.router.push("/dashboard");
-      }
-    },0);
-    */
-  }
 
   renderPictureUploadField(){
     return (

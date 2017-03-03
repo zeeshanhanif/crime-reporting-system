@@ -1,11 +1,10 @@
 
 const styles = {
-  donerDetailContainer: {
+  reportDetailContainer: {
       border: 'solid 1px #d9d9d9',
       minWidth: 320,
-      maxWidth: 400,
+      maxWidth: 600,
       height: 'auto',
-      position: 'absolute',
       top: '20%',
       left: 0,
       right: 0,

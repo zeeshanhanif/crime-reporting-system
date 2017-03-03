@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as MUI from 'material-ui'
 import styles from './CrimeSummaryStyles';
 import InfoBox from '../InfoBox/InfoBox'
 import Face from 'material-ui/svg-icons/action/face';
@@ -10,9 +9,6 @@ import {cyan600, pink600, purple600, orange600} from 'material-ui/styles/colors'
 
 class CrimeSummary extends Component {
   
-  componentWillMount() {
-    //this.props.getDonorDetail(this.props.params.id);
-  }
 
   getFormatedCounts(cityNameOrTotal){
     const {reportCounts} = this.props;

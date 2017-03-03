@@ -106,8 +106,10 @@ export default class ReportMiddleware {
 
     static getReportListFromFirebase(dispatch,cityNameOrTotal){
         //playersRef.orderByChild("name").equalTo("John")
-        const reportListRef = firebase.database().ref('/')
-                            .child(`reports/${cityNameOrTotal}`)
+        var reportListRef = firebase.database().ref('/')
+                            .child(`reports/${cityNameOrTotal}`);
+        
+        
         console.log("test middleware");
         reportListRef.on("child_added",function (snapshot){
             var reportObj = snapshot.val();
@@ -116,46 +118,66 @@ export default class ReportMiddleware {
         })
     }
 
-
-
-/*
-    /// Fetch Donor List Functions
-    static getDonorList(bloodGroup) {
-        console.log("getDonorList ",bloodGroup);
+    //My Report List
+    static getMyReportList(userId) {
+        console.log("getMyReportList ",userId);
         return (dispatch) => {
-            dispatch(DonorActions.getDonorList())
-            DonorMiddleware.getDonorListFromFirebase(dispatch,bloodGroup);            
+            dispatch(ReportActions.getMyReportList())
+            ReportMiddleware.getMyReportListFromFirebase(dispatch,userId);            
         }
     }
 
-    static getDonorListFromFirebase(dispatch,bloodGroup){
-        //playersRef.orderByChild("name").equalTo("John")
-        const donorListRef = firebase.database().ref('/')
-                            .child("users")
-                            .orderByChild("isDonor").equalTo(true);
-        donorListRef.on("child_added",function (snapshot){
-                        dispatch(DonorActions.addDonorToList(snapshot.val()))
-                    })
+    static getMyReportListFromFirebase(dispatch,userId){
+        var reportListRef = firebase.database().ref('/')
+                            .child(`userreports/${userId}`);
+        
+        console.log("test middleware");
+        reportListRef.on("child_added",function (snapshot){
+            var reportObj = snapshot.val();
+            reportObj.key = snapshot.key;
+            dispatch(ReportActions.addMyReportToList(reportObj))
+        })
     }
 
-    //Get Donor Detail
-    static getDonorDetial(donorId) {
-        console.log("getDonorDetial ",donorId);
+    //Get Report Detail
+    static getReportDetial(reportCity,reportId) {
+        console.log("getReportDetial ",reportId);
         return (dispatch) => {
-            dispatch(DonorActions.getDonorDetail())
-            DonorMiddleware.getDonorDetailFromFirebase(dispatch,donorId);            
+            dispatch(ReportActions.getReportDetail())
+            ReportMiddleware.getReportDetialFromFirebase(dispatch,reportCity,reportId);            
         }
     }
 
-    static getDonorDetailFromFirebase(dispatch,donorId){
+    static getReportDetialFromFirebase(dispatch,reportCity,reportId){
         firebase.database().ref('/')
-            .child(`users/${donorId}`)
+            .child(`reports/${reportCity}/${reportId}`)
             .on("value",function (snapshot){
-                dispatch(DonorActions.getDonorDetailSuccessful(snapshot.val()))
+                var reportDetail = snapshot.val();
+                reportDetail.key = snapshot.key;
+                dispatch(ReportActions.getReportDetailSuccessful(reportDetail))
             });
     }
 
-*/
+
+    static updateReportStatus(reportObj,newStatus) {
+        console.log("fileReport ",reportObj);
+        return (dispatch) => {
+            dispatch(ReportActions.updateReportStatus())
+            ReportMiddleware.updateReportStatusOnFirebase(dispatch,reportObj,newStatus);            
+        }
+    }
+
+    static updateReportStatusOnFirebase(dispatch,reportObj,newStatus){
+        var statusUpdateReportRef = firebase.database().ref('/')
+            .child(`reports/${reportObj.city}/${reportObj.key}/statuslist`);
+        var statusUpdateUserReportRef = firebase.database().ref('/')
+            .child(`userreports/${reportObj.userId}/${reportObj.key}/statuslist`);
+        statusUpdateReportRef.push({"statusMessage":newStatus});
+        statusUpdateUserReportRef.push({"statusMessage":newStatus});
+        dispatch(ReportActions.updateReportStatusSuccessful())
+
+    }
+
 
     //Get Cities List
     static getListOfCities() {
@@ -165,6 +187,7 @@ export default class ReportMiddleware {
             ReportMiddleware.getCitiesListFromFirebase(dispatch);            
         }
     }
+
 
     static getCitiesListFromFirebase(dispatch){
         firebase.database().ref('/')

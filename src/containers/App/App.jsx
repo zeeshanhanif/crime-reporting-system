@@ -37,7 +37,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    
+    /*
     if(this.props.isAuthenticated){
       console.log("Authenticated");
     }
@@ -46,7 +46,7 @@ class App extends Component {
       //Uncomment it and it will move to login page if not authenticated
       this.context.router.push("/login");
     }
-    
+    */
   }
 
   handleDrawerToggle = () => this.setState({drawerOpen: !this.state.drawerOpen});

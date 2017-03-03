@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './Dashboard.css';
+import { CrimeSummary, CrimeReports} from '../../components'
+
 import { DonorMiddleware } from '../../store'
+
 
 function mapStateToProps(state) {
     return {
+
         isAuthenticated: state.AuthReducer.isAuthenticated,
         authUser: state.AuthReducer.authUser,
         donorList: state.DonorReducer.donorList,
@@ -26,11 +30,16 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="dashboard-container">
-        {this.props.children?React.cloneElement(this.props.children, {...this.props}):this.props.children}
+        <div>
+          <CrimeSummary />
+        </div>
+        <div>
+          <CrimeReports />
+        </div>        
       </div>
     );
   }
 }
-
+//{this.props.children?React.cloneElement(this.props.children, {...this.props}):this.props.children}
 export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
 //export default Dashboard;

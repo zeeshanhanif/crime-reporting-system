@@ -3,10 +3,10 @@ import * as firebase from 'firebase'
 
 // adding firebase configuration
 var config = {
-    apiKey: "AIzaSyBd3BiGorQDkk4i2Y8f3nAcqomp0ikiUNk",
-    authDomain: "blood-bank-system-ecabb.firebaseapp.com",
-    databaseURL: "https://blood-bank-system-ecabb.firebaseio.com",
-    storageBucket: "blood-bank-system-ecabb.appspot.com",
-    messagingSenderId: "539807996340"
-};
-firebase.initializeApp(config);
+    apiKey: "AIzaSyBMApqHehUgQWVhoOPX6OrOlg_vTSNsmrI",
+    authDomain: "crime-reporting-system-829f2.firebaseapp.com",
+    databaseURL: "https://crime-reporting-system-829f2.firebaseio.com",
+    storageBucket: "crime-reporting-system-829f2.appspot.com",
+    messagingSenderId: "968860062032"
+  };
+  firebase.initializeApp(config);

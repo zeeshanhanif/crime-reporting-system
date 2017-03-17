@@ -113,7 +113,7 @@ class Navigation extends Component {
   render() {
     return (
       <div className="navigation-container">
-        <MUI.AppBar style={this.props.styles} title="Blood Bank System"
+        <MUI.AppBar style={this.props.styles} title="Crime Reporting System"
               onLeftIconButtonTouchTap={this.props.drawerToggle}
               iconElementRight={this.renderActionButtons()}
               />

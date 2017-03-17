@@ -1,6 +1,6 @@
 import {grey400} from 'material-ui/styles/colors';
 const styles = {
-  registerDonorContainer: {
+  fileReportContainer: {
       minWidth: 320,
       maxWidth: 400,
       height: 'auto',

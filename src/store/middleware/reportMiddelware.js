@@ -81,7 +81,7 @@ export default class ReportMiddleware {
     static getReportCounts() {
         console.log("getReportCounts");
         return (dispatch) => {
-            dispatch(ReportActions.getListOfCities())
+            dispatch(ReportActions.getReportCounts())
             ReportMiddleware.getReportCountFromFirebase(dispatch);            
         }
     }
